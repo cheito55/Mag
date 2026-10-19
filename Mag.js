@@ -14,6 +14,7 @@ let _base = BASE;
 let _log = [];
 let _liveCache = null;
 let _liveCacheTime = 0;
+let _config = null;
 
 function dbg(s) { _log.push(String(s)); log("[MagmaXtream] " + s); }
 
@@ -37,7 +38,7 @@ function asList(x) { return Array.isArray(x) ? x : (x && typeof x === "object" ?
 
 // ---------- helpers ----------
 function author() {
-  return new PlatformAuthorLink(new PlatformID(PLATFORM, "magma", config.id), "Magma", "", "");
+  return new PlatformAuthorLink(new PlatformID(PLATFORM, "magma", _config.id), "Magma", "", "");
 }
 function fullThumb(u) {
   if (!u) return "";
@@ -59,7 +60,7 @@ function getLiveStreamsCached() {
 
 function liveItem(s) {
   return new PlatformVideo({
-    id: new PlatformID(PLATFORM, "live" + s.stream_id, config.id),
+    id: new PlatformID(PLATFORM, "live" + s.stream_id, _config.id),
     name: s.name || ("Canal " + s.stream_id),
     thumbnails: thumbs(fullThumb(s.stream_icon)),
     author: author(),
@@ -72,7 +73,7 @@ function liveItem(s) {
 }
 function movieItem(s) {
   return new PlatformVideo({
-    id: new PlatformID(PLATFORM, "mov" + s.stream_id, config.id),
+    id: new PlatformID(PLATFORM, "mov" + s.stream_id, _config.id),
     name: s.name || ("Película " + s.stream_id),
     thumbnails: thumbs(fullThumb(s.stream_icon)),
     author: author(),
@@ -85,7 +86,7 @@ function movieItem(s) {
 }
 function seriesItem(s) {
   return new PlatformVideo({
-    id: new PlatformID(PLATFORM, "ser" + s.series_id, config.id),
+    id: new PlatformID(PLATFORM, "ser" + s.series_id, _config.id),
     name: "📺 " + (s.name || ("Serie " + s.series_id)),
     thumbnails: thumbs(fullThumb(s.cover)),
     author: author(),
@@ -109,7 +110,7 @@ class ListPager extends VideoPager {
 function safe(action, extra) { try { return asList(api(action, extra)); } catch (e) { dbg("safe " + action + ": " + e); return []; } }
 
 // ---------- source ----------
-source.enable = function (conf) { _log = []; _liveCache = null; };
+source.enable = function (conf) { _config = conf; _log = []; _liveCache = null; };
 source.getHome = function () {
   const items = [];
   const live = getLiveStreamsCached();
@@ -121,7 +122,7 @@ source.getHome = function () {
   live.forEach(s => items.push(liveItem(s)));
   if (!items.length) {
     items.push(new PlatformVideo({
-      id: new PlatformID(PLATFORM, "diag", config.id), name: "⚠️ Sin datos: " + _log.slice(-3).join(" | "),
+      id: new PlatformID(PLATFORM, "diag", _config.id), name: "⚠️ Sin datos: " + _log.slice(-3).join(" | "),
       thumbnails: thumbs(""), author: author(), uploadDate: now(), url: "xt://diag", duration: 0, viewCount: 0, isLive: false
     }));
   }
@@ -171,7 +172,7 @@ source.getContentDetails = function (url) {
   if (!m) throw new ScriptException("URL no soportada: " + url);
   const kind = m[1], id = m[2];
   const base = {
-    id: new PlatformID(PLATFORM, kind + id, config.id),
+    id: new PlatformID(PLATFORM, kind + id, _config.id),
     author: author(),
     uploadDate: now(),
     url: url,
@@ -303,7 +304,7 @@ source.getContentRecommendations = function (url) {
   try {
     const eps = flattenEpisodes(api("get_series_info", "&series_id=" + m[1])).slice(1);
     return new ListPager(eps.map(e => new PlatformVideo({
-      id: new PlatformID(PLATFORM, "ep" + e.id, config.id),
+      id: new PlatformID(PLATFORM, "ep" + e.id, _config.id),
       name: e.label,
       thumbnails: thumbs(fullThumb(e.img)),
       author: author(),
