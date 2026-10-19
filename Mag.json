@@ -1,27 +1,31 @@
 {
   "name": "Magma Xtream",
-  "description": "TV en vivo, películas y series vía Xtream Codes (player_api.php) de tv.m3uts.xyz",
-  "author": "Cheito",
+  "description": "Live (m3uts) + Pel\u00edculas/Series (plpro.org con extractores)",
+  "author": "enzo",
   "authorUrl": "https://github.com/cheito55",
   "sourceUrl": "https://raw.githubusercontent.com/cheito55/Mag/main/Mag.json",
   "repositoryUrl": "https://github.com/cheito55/Mag",
   "scriptUrl": "https://raw.githubusercontent.com/cheito55/Mag/main/Mag.js",
-  "version": 4,
+  "version": 5,
   "iconUrl": "",
   "id": "5c0e7d3a-9b41-4e2f-8a67-1d3f6b2c9e55",
   "scriptSignature": "",
   "scriptPublicKey": "",
-  "packages": ["Http"],
+  "packages": [
+    "Http"
+  ],
   "allowEval": false,
   "allowUrls": [
     "tv.m3uts.xyz",
-    "i.tvcluboficial.com",
-    "ts0.tvcluboficial.com",
-    "ts9.tvcluboficial.com",
-    "playmogo.com",
-    "hgplaycdn.com",
+    "plpro.org",
     "image.tmdb.org",
-    "videolatam.com",
-    "streamtv.intervenhosting.net"
+    "vidhidefast.com",
+    "voe.sx",
+    "do7go.com",
+    "doodstream.com",
+    "hlsflex.com",
+    "streamwish.to",
+    "callistanise.com",
+    "i.tvcluboficial.com"
   ]
 }
